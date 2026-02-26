@@ -5,8 +5,10 @@ build:
   tools:
     python: "3.11"
 
+python:
+  install:
+    - requirements: docs-requirements.txt
+
 sphinx:
   builder: html
-  # IMPORTANT: This tells RTD to look inside your new 'website' folder!
-  # If your conf.py is inside website/source/conf.py, change this line to match.
   configuration: Website/source/conf.py
