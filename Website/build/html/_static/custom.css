@@ -1,0 +1,16 @@
+/* Add some breathing room between the logo and the title */
+.wy-side-nav-search > a.icon img.logo {
+    margin-bottom: 0px; 
+    margin-top: 10px;
+}
+
+/* 2. Add "Quick Search" Label */
+.wy-side-nav-search > div[role="search"]::before {
+    content: "Quick Search"; /* The text you want to add */
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.8); /* Off-white color to match the theme */
+    text-transform: uppercase;       /* Optional: Makes it look like a header */
+    font-size: 0.85em;               /* Optional: Matches other headers */
+}
