@@ -9,4 +9,4 @@ sphinx:
   builder: html
   # IMPORTANT: This tells RTD to look inside your new 'website' folder!
   # If your conf.py is inside website/source/conf.py, change this line to match.
-  configuration: website/conf.py
+  configuration: website/source/conf.py
