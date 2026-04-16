@@ -1,0 +1,314 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MEMORY MANAGEMENT &mdash; Math Unikernel 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/css\lightbox.min.css?v=6e7d0de0" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3db2c5b4" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js\lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+      <script>lightbox.option({"alwaysShowNavOnTouchDevices": false, "albumLabel": "Image %1 of %2", "disableScrolling": false, "fadeDuration": 600, "fitImagesInViewport": true, "imageFadeDuration": 600, "positionFromTop": 50, "resizeDuration": 700, "showImageNumberLabel": true, "wrapAround": true})</script>
+      <script src="_static/custom.js?v=46a9058e"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="NETWORK COMPONENTS" href="network.html" />
+    <link rel="prev" title="CORE COMPONENTS" href="core_components.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Math Unikernel
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-1-wsl-setup-windows-users">Phase 1: WSL Setup (Windows Users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-2-prerequisites-verification">Phase 2: Prerequisites &amp; Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#install-system-packages">1. Install System Packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#setup-the-cross-compiler">2. Setup the Cross-Compiler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#limine-bootloader-host-tool">3. Limine Bootloader Host Tool</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-3-build-run-workflow">Phase 3: Build &amp; Run Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#troubleshooting-common-errors">Troubleshooting Common Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="repository.html">GitHub Repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boot.html">BOOT COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="boot.html#boot-s-boot-assembly-kernel-handoff">boot.S (Boot Assembly &amp; Kernel Handoff)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#system-integration-bootloader-handshake">System Integration &amp; Bootloader Handshake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#execution-flow-example">Execution Flow Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core_components.html">CORE COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#gtd-c-global-descriptor-table">gtd.c (Global Descriptor Table)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#direct-api-references">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#idt-c-interrupt-descriptor-table">idt.c (Interrupt Descriptor Table)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id3">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id4">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id5">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id6">Direct API References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#isr-s-interrupt-service-routine">isr.S (Interrupt Service Routine)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id9">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id10">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id11">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#global-tables">Global Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#assembly-macros">Assembly Macros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#execution-routines">Execution Routines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#kernel-c">kernel.c</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id12">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#system-integration-boot-sequence">System Integration &amp; Boot Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#the-unikernel-state-machine">The Unikernel State Machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id15">Direct API References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#display-c-display-driver-framebuffer-terminal">display.c (Display Driver &amp; Framebuffer Terminal)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id16">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id17">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id18">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#mathlib-c-hardware-accelerated-math-library">mathlib.c (Hardware-Accelerated Math Library)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id19">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#system-integration-application-example">System Integration &amp; Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id20">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MEMORY MANAGEMENT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pmm-c-physical-memory-manager">pmm.c (Physical Memory Manager)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#vmm-c-virtual-memory-manager">vmm.c (Virtual Memory Manager)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">NETWORK COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="network.html#pci-c-peripheral-component-interconnect">pci.c (Peripheral Component Interconnect)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="network.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#direct-api-references">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#network-c-network-layer">network.c (Network Layer)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id2">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id3">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id4">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#loader-c-payload-loader">loader.c (Payload Loader)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id5">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id6">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id7">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id8">Direct API References:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Math Unikernel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">MEMORY MANAGEMENT</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/memory.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="memory-management">
+<h1>MEMORY MANAGEMENT<a class="headerlink" href="#memory-management" title="Link to this heading"></a></h1>
+<section id="pmm-c-physical-memory-manager">
+<h2>pmm.c (Physical Memory Manager)<a class="headerlink" href="#pmm-c-physical-memory-manager" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The Physical Memory Manager (PMM) is responsible for keeping track of the actual, raw hardware RAM available to the system. It uses a bitmap data structure to represent the entire physical memory space, where each bit corresponds to a single 4KB frame of memory. If a bit is 1, the frame is in use; if it is 0, the frame is free. The PMM does not deal with virtual addresses or CPU protections; its sole job is to parse the hardware memory map provided by the bootloader, reserve spaces that are occupied by hardware (like the bootloader or the kernel itself), and hand out contiguous blocks of free RAM when requested by higher-level systems.</p>
+</section>
+<section id="system-integration-initialization">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#system-integration-initialization" title="Link to this heading"></a></h3>
+<p>The PMM is initialized in the main kernel boot sequence immediately after the GDT and IDT. It relies heavily on the limine_memmap_response passed directly from the bootloader to understand the hardware layout. During pmm_init(), the kernel scans the memory map to find the highest usable physical address and calculates how large the bitmap needs to be. It then searches for the first available block of memory large enough to hold this bitmap and places it there. By default, the entire bitmap is initialized to 0xFF (fully used/locked), and then the PMM explicitly iterates through the usable sections of the memory map to “free” the valid frames.</p>
+</section>
+<section id="api-reference">
+<h3>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h3>
+<p><strong>Macros</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PMM_INIT_SUCCESS</span></code>: Evaluates to 8 (1&lt;&lt;3). Returned upon successful initialization of the physical bitmap.</p></li>
+</ul>
+<p><strong>Data Structures</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">pmm_context</span></code>: The global state container for the physical memory subsystem.</dt><dd><ul>
+<li><p>Fields:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint8_t*</span> <span class="pre">bitmap</span></code>: A pointer to the dynamically placed bitmap array.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">bitmap_size</span></code>: The total size of the bitmap in bytes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">total_frames</span></code>: The total number of 4KB physical frames tracked by the system.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">free_frames</span></code>: A running counter of currently available frames.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">pmm_init(struct</span> <span class="pre">limine_memmap_response*</span> <span class="pre">response)</span></code>: Parses the bootloader’s memory map to locate available RAM, sizes and places the bitmap structure, and marks all usable and bootloader-reclaimable memory as free. Returns: PMM_INIT_SUCCESS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">pmm_alloc()</span></code>: Scans the bitmap using a “first fit” algorithm to find the first available single 4KB frame. It flips the corresponding bit to claim it. Returns: The 64-bit physical address of the allocated 4KB frame (or 0 if out of memory).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">pmm_alloc_2mb()</span></code>: Scans the bitmap to find 64 contiguous free 4KB frames (which equates to exactly 2MB of memory) aligned to a 2MB boundary. Returns: The physical address of the 2MB block.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">pmm_free(uint64_t</span> <span class="pre">phys_addr)</span> <span class="pre">/</span> <span class="pre">void</span> <span class="pre">pmm_free_2mb(uint64_t</span> <span class="pre">phys_addr)</span></code>: Converts the given physical address into a frame index and flips the corresponding bit(s) in the bitmap back to 0, freeing the memory for future use. Ensures the address is properly aligned to 4KB (0xfff) or 2MB (0x200000), respectively.</p></li>
+</ul>
+</section>
+</section>
+<section id="vmm-c-virtual-memory-manager">
+<h2>vmm.c (Virtual Memory Manager)<a class="headerlink" href="#vmm-c-virtual-memory-manager" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>The Virtual Memory Manager (VMM) creates the illusion of a clean, continuous memory space for software to run in, isolating the CPU from the fragmented reality of physical RAM. It implements standard x86-64 4-level paging (PML4, PDPT, PD, PT) to translate 64-bit virtual addresses into the physical addresses managed by the PMM. In this unikernel, the VMM is crucial because it implements the Higher Half Direct Map (HHDM) architecture and supports 2MB “Huge Pages”. Huge pages drastically reduce Translation Lookaside Buffer (TLB) misses, providing a massive performance boost for the mathematically intensive, data-heavy workloads this system executes.</p>
+</section>
+<section id="id2">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>The VMM is initialized immediately after the PMM, as it requires the PMM to allocate physical frames for its page tables. During vmm_init(), the kernel constructs the root PML4 table. It identically maps the lowest 4MB of memory (for legacy hardware access), the kernel and its modules, and maps all usable memory into the Higher Half using the HHDM offset provided by Limine. Finally, it writes the physical address of the PML4 table into the CPU’s CR3 control register, activating the new paging structure.</p>
+</section>
+<section id="application-example">
+<h3>Application Example<a class="headerlink" href="#application-example" title="Link to this heading"></a></h3>
+<p>The vmm_alloc_huge_page function is directly exposed via the kernel_api_t interface, allowing external payloads to allocate contiguous 2MB blocks of memory for their math operations.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/kernel_api.h&quot;</span>
+<span class="c1">// Example of a payload using the API to get memory</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">math_workload</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">kernel_api_t</span><span class="o">*</span><span class="w"> </span><span class="n">api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">kernel_api_t</span><span class="o">*</span><span class="p">)</span><span class="n">KERNEL_API_ADDRESS</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Allocate 4 MB of memory (two 2MB huge pages) with Read/Write flags</span>
+<span class="w">    </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">massive_matrix</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">api</span><span class="o">-&gt;</span><span class="n">alloc_huge_page</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">VMM_PRESENT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">VMM_WRITEABLE</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// ... perform calculations ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id3">
+<h3>API Reference<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p><strong>Macros</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Flags</span></code>: Standard paging attributes such as VMM_PRESENT (1&lt;&lt;0), VMM_WRITEABLE (1&lt;&lt;1), and VMM_HUGE (1&lt;&lt;7) used to dictate the access rights of a given page.</p></li>
+</ul>
+<p><strong>Data Structures</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">uint64_t</span> <span class="pre">pt_entry_t</span></code>: A 64-bit page table entry containing the physical address of the next table or memory frame, combined with access flags.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">page_table_t</span></code>: An array of 512 pt_entry_ts, strictly aligned to a 4KB boundary, representing a single level in the paging hierarchy.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">vmm_context</span></code>: Holds the root of the paging hierarchy.</dt><dd><ul>
+<li><p>Fields:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">page_table_t*</span> <span class="pre">pml4_virt</span></code>: The virtual address of the top-level PML4 table.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uintptr_t</span> <span class="pre">pml4_phys</span></code>: The physical address of the PML4 table, designed to be loaded into the CR3 register.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">vmm_init(struct</span> <span class="pre">limine_kernel_address_response*</span> <span class="pre">kernel_addr_response,</span> <span class="pre">struct</span> <span class="pre">limine_memmap_response*</span> <span class="pre">memmap_response)</span></code>: Sets up the root page tables, maps the kernel code, maps the framebuffer, and implements the Higher Half Direct Map (HHDM) before loading the CR3 register. Returns: VMM_INIT_SUCCESS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">vmm_map_virt_to_phys(uint64_t</span> <span class="pre">virt_addr,</span> <span class="pre">uint64_t</span> <span class="pre">phys_addr,</span> <span class="pre">uint64_t</span> <span class="pre">flags)</span></code>: Traverses the 4-level paging hierarchy (allocating new intermediate tables via the PMM if they don’t exist) to link a specific 4KB virtual address to a physical frame, applying the requested access flags. Uses invlpg to flush the CPU cache for that address.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void*</span> <span class="pre">vmm_alloc_huge_page(uint64_t</span> <span class="pre">num_pages,</span> <span class="pre">uint64_t</span> <span class="pre">flags)</span></code>: The premier memory allocation function for the unikernel. It requests properly aligned 2MB blocks from the PMM and maps them directly into the Page Directory (bypassing the Page Table level entirely) using the VMM_HUGE flag. It zeroes out the memory to prevent data leaks and increments the global virtual address tracker. Returns: A void* pointer to the newly allocated block of virtual memory.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="core_components.html" class="btn btn-neutral float-left" title="CORE COMPONENTS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="network.html" class="btn btn-neutral float-right" title="NETWORK COMPONENTS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Eddy Rodriguez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

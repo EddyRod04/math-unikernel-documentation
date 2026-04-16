@@ -1,0 +1,638 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CORE COMPONENTS &mdash; Math Unikernel 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/css\lightbox.min.css?v=6e7d0de0" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3db2c5b4" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js\lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+      <script>lightbox.option({"alwaysShowNavOnTouchDevices": false, "albumLabel": "Image %1 of %2", "disableScrolling": false, "fadeDuration": 600, "fitImagesInViewport": true, "imageFadeDuration": 600, "positionFromTop": 50, "resizeDuration": 700, "showImageNumberLabel": true, "wrapAround": true})</script>
+      <script src="_static/custom.js?v=46a9058e"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="MEMORY MANAGEMENT" href="memory.html" />
+    <link rel="prev" title="BOOT COMPONENTS" href="boot.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Math Unikernel
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-1-wsl-setup-windows-users">Phase 1: WSL Setup (Windows Users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-2-prerequisites-verification">Phase 2: Prerequisites &amp; Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#install-system-packages">1. Install System Packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#setup-the-cross-compiler">2. Setup the Cross-Compiler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#limine-bootloader-host-tool">3. Limine Bootloader Host Tool</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-3-build-run-workflow">Phase 3: Build &amp; Run Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#troubleshooting-common-errors">Troubleshooting Common Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="repository.html">GitHub Repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boot.html">BOOT COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="boot.html#boot-s-boot-assembly-kernel-handoff">boot.S (Boot Assembly &amp; Kernel Handoff)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#system-integration-bootloader-handshake">System Integration &amp; Bootloader Handshake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#execution-flow-example">Execution Flow Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CORE COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#gtd-c-global-descriptor-table">gtd.c (Global Descriptor Table)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-api-references">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#idt-c-interrupt-descriptor-table">idt.c (Interrupt Descriptor Table)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Direct API References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#isr-s-interrupt-service-routine">isr.S (Interrupt Service Routine)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id9">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id10">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id11">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#global-tables">Global Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#assembly-macros">Assembly Macros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#execution-routines">Execution Routines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#kernel-c">kernel.c</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id12">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-integration-boot-sequence">System Integration &amp; Boot Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-unikernel-state-machine">The Unikernel State Machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id15">Direct API References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#display-c-display-driver-framebuffer-terminal">display.c (Display Driver &amp; Framebuffer Terminal)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id16">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id17">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id18">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#mathlib-c-hardware-accelerated-math-library">mathlib.c (Hardware-Accelerated Math Library)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id19">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-integration-application-example">System Integration &amp; Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id20">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">MEMORY MANAGEMENT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#pmm-c-physical-memory-manager">pmm.c (Physical Memory Manager)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#vmm-c-virtual-memory-manager">vmm.c (Virtual Memory Manager)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#id2">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#id3">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="network.html">NETWORK COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="network.html#pci-c-peripheral-component-interconnect">pci.c (Peripheral Component Interconnect)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="network.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#direct-api-references">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#network-c-network-layer">network.c (Network Layer)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id2">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id3">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id4">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="network.html#loader-c-payload-loader">loader.c (Payload Loader)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id5">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id6">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id7">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="network.html#id8">Direct API References:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Math Unikernel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">CORE COMPONENTS</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/core_components.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="core-components">
+<h1>CORE COMPONENTS<a class="headerlink" href="#core-components" title="Link to this heading"></a></h1>
+<p>This section details the foundational x86-64 data structures and initialization routines that establish the unikernel environment.</p>
+<figure class="align-center" id="id21">
+<a class="reference internal image-reference" href="_images/core_architecture.png"><a href="_images/core_architecture.png" data-lightbox="image-set">
+<img alt="Diagram of the core unikernel architecture and data structures" src="_images/core_architecture.png" style="width: 100%;" />
+</a>
+</a>
+<figcaption>
+<p><span class="caption-text">Visual mapping of the GDT, IDT, system initialization sequence, and Memory Manager.</span><a class="headerlink" href="#id21" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="gtd-c-global-descriptor-table">
+<h2>gtd.c (Global Descriptor Table)<a class="headerlink" href="#gtd-c-global-descriptor-table" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The Global Descriptor Table (GDT) is a core x86 data structure that defines the memory segments used during program execution. In 64-bit long mode, the legacy concepts of memory “segmentation” (base and limits) are largely ignored by the CPU, but a valid GDT is still strictly required to define the execution privileges (ring levels) and segment types. This module sets up a foundational 64-bit flat memory model for the unikernel. It initializes three required segments: a Null descriptor, a Ring 0 Kernel Code segment, and a Ring 0 Kernel Data segment. It also provides the underlying assembly routine to load the table pointer into the CPU and perform a far jump to flush the legacy segment registers.</p>
+</section>
+<section id="system-integration-initialization">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#system-integration-initialization" title="Link to this heading"></a></h3>
+<p>Within the unikernel’s boot sequence, the GDT is initialized in kernel_main() immediately following the Limine bootloader handshakes and the legacy PIC remapping (pic_remap(32, 40)). It serves as the primary hardware initialization step, strictly preceding the setup of the Interrupt Descriptor Table (IDT), Physical Memory Manager (PMM), and Virtual Memory Manager (VMM). The kernel tracks the successful initialization of the GDT using a bitwise state flag (init_status <a href="#id1"><span class="problematic" id="id2">|</span></a>= gdt_init()). If the GDT fails to initialize, the kernel will print a failure log and immediately halt the CPU via hcf(). Hardware interrupts are safely enabled only after the GDT and all other boot structures are fully validated.</p>
+</section>
+<section id="application-example">
+<h3>Application Example<a class="headerlink" href="#application-example" title="Link to this heading"></a></h3>
+<p>The following example demonstrates how the GDT is invoked during the kernel’s early boot sequence.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/kernel_api.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/gdt.h&quot;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">kernel_main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">init_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// ... Limine handshakes and PIC remapping ...</span>
+<span class="w">    </span><span class="c1">// Initialize the GDT and track its success state</span>
+<span class="w">    </span><span class="n">init_status</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">gdt_init</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// Proceed with further architectural setup</span>
+<span class="w">    </span><span class="n">init_status</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">idt_init</span><span class="p">();</span>
+<span class="w">    </span><span class="n">init_status</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">pmm_init</span><span class="p">(</span><span class="n">memmap_request</span><span class="p">.</span><span class="n">response</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Validate GDT initialization</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">init_status</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">GDT_INIT_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PRINTS</span><span class="p">(</span><span class="s">&quot;READY: GDT has been initialized and loaded.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PRINTS</span><span class="p">(</span><span class="s">&quot;ERROR: GDT initialization failed.</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="n">hcf</span><span class="p">();</span><span class="w"> </span><span class="c1">// Halt CPU on fatal error</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="direct-api-references">
+<h3>Direct API References:<a class="headerlink" href="#direct-api-references" title="Link to this heading"></a></h3>
+<p><strong>Macros</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">GDT_INIT_SUCCESS</span></code>: Evaluates to 2 (1&lt;&lt;1). Returned upon successful loading and flushing of the GDT.</p></li>
+</ul>
+<p><strong>Data Structures</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">typedef</span> <span class="pre">uint64_t</span> <span class="pre">descriptor</span></code>: Represents a single, raw 64-bit entry within the Global Descriptor Table.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">gdt_ptr</span></code>: The highly specific, packed pointer structure required by the lgdt CPU instruction to locate and load the table.</dt><dd><ul>
+<li><p>Fields:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint16_t</span> <span class="pre">limit</span></code>: The total size of the GDT in bytes, minus 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">base</span></code>: The 64-bit linear memory address pointing to the first entry of the GDT array.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">gdt_context</span></code>: A state container that holds both the active descriptor array and its corresponding CPU pointer.</dt><dd><ul>
+<li><p>Fields:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">descriptor</span> <span class="pre">entries[3]</span></code>: The array of GDT entries (Null, Code, Data).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">gdt_ptr</span> <span class="pre">pointer</span></code>: The pointer structure referencing the entries array.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">gdt_init()</span></code>: Initializes the Global Descriptor Table context. It populates the Null, Kernel Code (0x9a access, 0xa flags), and Kernel Data (0x92 access, 0x0 flags) descriptors using specific access bytes and flags required for x86-64 long mode. It calculates the table limit, sets the base pointer, and internally calls load_gdt() to activate it. Returns: GDT_INIT_SUCCESS upon completion.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">descriptor</span> <span class="pre">create_descriptor(uint8_t</span> <span class="pre">access_byte,</span> <span class="pre">uint8_t</span> <span class="pre">flags)</span></code>: Constructs a 64-bit GDT entry. Because 64-bit mode enforces a flat memory model, the legacy base and limit fields are bypassed. This helper function shifts the access_byte (to bit 40) and flags (to bit 52) into their correct architectural positions within the 64-bit integer.</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">access_byte</span></code>: The byte determining ring level (DPL), executable status, and segment type.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">flags</span></code>: The nibble determining 64-bit/32-bit sizing and granularity.</p></li>
+<li><p>Returns: A fully formatted 64-bit descriptor.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">load_gdt(struct</span> <span class="pre">gdt_ptr*</span> <span class="pre">ptr)</span></code>: Note: This function is implemented in assembly (gdt_load.S). Executes the lgdt instruction to load the new table pointer into the CPU. It then manually updates the data segment registers (ds, es, fs, gs, ss) with the Data Segment selector (0x10) and performs a far return (lretq) pushing the Code Segment selector (0x08) to flush and reload the CS register.</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ptr</span></code>: A pointer to the packed gdt_ptr structure containing the table’s limit and base address.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+<section id="idt-c-interrupt-descriptor-table">
+<h2>idt.c (Interrupt Descriptor Table)<a class="headerlink" href="#idt-c-interrupt-descriptor-table" title="Link to this heading"></a></h2>
+<section id="id3">
+<h3>Overview<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>The Interrupt Descriptor Table (IDT) is an x86 data structure used by the CPU to determine the correct response to exceptions (like division by zero or page faults) and hardware interrupts (like keyboard input or system timers). In 64-bit long mode, the CPU requires 16-byte (128-bit) IDT entries to accommodate 64-bit memory addresses. This module initializes the IDT with the first 48 vectors (32 CPU exceptions and 16 hardware IRQs mapped from the legacy PIC). It provides a central C-level dispatcher that catches all interrupts, halting the system and dumping registers upon a fatal exception, or dynamically routing hardware IRQs to registered driver callbacks.</p>
+</section>
+<section id="id4">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p>The IDT is initialized within kernel_main() immediately after the Global Descriptor Table (GDT) is successfully loaded. This strict ordering is required because every IDT entry must reference a valid GDT Code Segment selector (in this kernel, 0x08). The kernel tracks the successful initialization of the IDT using the init_status bitwise flag. If it fails, the system prints an error log and halts. Importantly, the CPU’s maskable hardware interrupts are kept disabled during this setup; __asm__ volatile(“sti”); is only executed at the very end of the kernel_main() boot sequence once all core systems (PMM, VMM, Display) are fully online.</p>
+</section>
+<section id="id5">
+<h3>Application Example<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>The IDT is initialized once during boot, but the API allows other kernel modules (like a keyboard driver) to register their own IRQ handlers later.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/idt.h&quot;</span>
+<span class="c1">// 1. Initialization in kernel_main()</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">kernel_main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// GDT must be initialized first!</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">init_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gdt_init</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// Initialize the IDT and load the pointer</span>
+<span class="w">    </span><span class="n">init_status</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">idt_init</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// ... complete rest of boot sequence ...</span>
+<span class="w">    </span><span class="c1">// Enable CPU interrupts</span>
+<span class="w">    </span><span class="n">__asm__</span><span class="w"> </span><span class="k">volatile</span><span class="p">(</span><span class="s">&quot;sti&quot;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="c1">// 2. Registering a driver handler (e.g., in a keyboard driver)</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">keyboard_driver_init</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Register the keyboard handler to IRQ 1 (Vector 33)</span>
+<span class="w">    </span><span class="n">register_irq_handler</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">keyboard_callback</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id6">
+<h3>Direct API References<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p><strong>Macros</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">IDT_INIT_SUCCESS</span></code>: Evaluates to 4 (1&lt;&lt;2). Returned upon the successful loading of the IDT pointer into the CPU.</p></li>
+</ul>
+<p><strong>Data Structures</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">idt_entry</span></code>: Represents a packed, 16-byte descriptor for a single interrupt vector in 64-bit mode.</dt><dd><ul>
+<li><p>Fields:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">isr_low,</span> <span class="pre">isr_mid,</span> <span class="pre">isr_high</span></code>: The split components of the 64-bit virtual address pointing to the interrupt service routine (ISR).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">kernel_cs</span></code>: The GDT segment selector (hardcoded to 0x08 for the Kernel Code Segment).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">attributes</span></code>: The flags determining gate type (Interrupt or Trap) and execution privileges (DPL).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ist</span></code>: The Interrupt Stack Table offset (set to 0).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">idt_ptr</span></code>: The specific, packed pointer structure required by the lidt CPU instruction.</dt><dd><ul>
+<li><p>Fields:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">limit</span></code>: The size of the active IDT array in bytes, minus 1.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">base</span></code>: The 64-bit linear memory address of the first idt_entry.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">interrupt_frame</span></code>: Defines the exact layout of the CPU registers as they are pushed onto the stack during an interrupt. This is used to read the state of the machine at the exact moment an exception occurred.</dt><dd><ul>
+<li><p>Fields: Includes general-purpose registers (r15 through rax), the interrupt vector number, the hardware error code, and the automatic hardware-pushed state (rip, cs, rflags, rsp, ss).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">idt_context</span></code>: The global state container holding the active 256-entry array, the lidt pointer, and a statistical counter for total interrupts fired.</p></li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">idt_init()</span></code>: Zeroes out the entire 256-entry IDT array, then populates the first 48 vectors. It wires these entries to the assembly routines found in the isr_stub_table, applies full kernel authority flags (0x8e), calculates the table limit, and invokes load_idt(). Returns: IDT_INIT_SUCCESS.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">register_irq_handler(uint8_t</span> <span class="pre">irq,</span> <span class="pre">void*</span> <span class="pre">handler)</span></code>: Registers a custom function pointer to be executed when a specific hardware IRQ fires.</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">irq</span></code>: The hardware IRQ number (0-15). (Note: IRQ 0 corresponds to CPU vector 32).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">handler</span></code>: A pointer to the driver’s handler function.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">interrupt_dispatcher(struct</span> <span class="pre">interrupt_frame*</span> <span class="pre">frame)</span></code>: The central C-level interrupt router called by the assembly stubs.</dt><dd><ul>
+<li><p>Behavior:</p></li>
+<li><p>Vectors 0-31 (Exceptions): Triggers a “MATH UNIKERNEL PANIC”. Prints the faulting instruction pointer (RIP), the error code, and a complete dump of all general-purpose registers before halting the CPU via hcf() to prevent corruption.</p></li>
+<li><p>Vectors 32-47 (Hardware IRQs): Calculates the relative IRQ number, invokes the custom function pointer in irq_handlers (if one was registered), and explicitly sends an End of Interrupt (EOI) signal to the programmable interrupt controller (pic_send_eoi) so it can unmask future interrupts.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">load_idt(struct</span> <span class="pre">idt_ptr*</span> <span class="pre">ptr)</span></code>: (Implemented in assembly). Executes the lidt instruction to inform the CPU of the newly constructed interrupt table’s location and size.</p></li>
+</ul>
+<p><a href="#id7"><span class="problematic" id="id8">**</span></a>* idt.c and gdt.c both are involved in isr.S.</p>
+</section>
+</section>
+<section id="isr-s-interrupt-service-routine">
+<h2>isr.S (Interrupt Service Routine)<a class="headerlink" href="#isr-s-interrupt-service-routine" title="Link to this heading"></a></h2>
+<section id="id9">
+<h3>Overview<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<p>The ISR assembly file (isr.S) provides the critical low-level bridge between the hardware CPU interrupts and the higher-level C kernel. When an exception or hardware IRQ occurs, the CPU suspends current execution and jumps to an address defined in the IDT. Because C functions expect a specific calling convention (System V AMD64 ABI), the kernel cannot jump directly into C code. This module safely catches the hardware jump, saves a complete snapshot of the CPU’s current register state to the stack, standardizes the stack frame (accounting for varying hardware error codes), and carefully hands execution over to the C-level interrupt_dispatcher before restoring the system and resuming the original math workload.</p>
+</section>
+<section id="id10">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<p>This file does not have an initialization function of its own; rather, it exposes a global array of pointers (isr_stub_table). During the unikernel boot sequence, idt_init() iterates through this array and wires each of the first 48 IDT entries to its corresponding isr_stub_[vector]. When an interrupt fires, the execution flow is strictly: Hardware Trigger $rightarrow$ IDT Entry $rightarrow$ isr_stub_[vector] $rightarrow$ isr_common $rightarrow$ interrupt_dispatcher (C code). After the C code returns, execution falls back to isr_common to perform the hardware return (iretq).</p>
+</section>
+<section id="id11">
+<h3>Application Example<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>While this file is purely assembly, its structures are directly imported and utilized by the IDT module during kernel setup.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/idt.h&quot;</span>
+<span class="c1">// The external array defined in the .data section of isr.S</span>
+<span class="k">extern</span><span class="w"> </span><span class="kt">void</span><span class="o">*</span><span class="w"> </span><span class="n">isr_stub_table</span><span class="p">[];</span>
+<span class="kt">uint8_t</span><span class="w"> </span><span class="nf">idt_init</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Wire the generated assembly stubs into the IDT descriptors</span>
+<span class="w">    </span><span class="k">for</span><span class="p">(</span><span class="kt">uint8_t</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">48</span><span class="p">;</span><span class="w"> </span><span class="n">vector</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">idt_set_descriptor</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="kt">uint64_t</span><span class="p">)</span><span class="n">isr_stub_table</span><span class="p">[</span><span class="n">vector</span><span class="p">],</span><span class="w"> </span><span class="mh">0x8e</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// ... load the IDT ...</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="global-tables">
+<h3>Global Tables<a class="headerlink" href="#global-tables" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">void*</span> <span class="pre">isr_stub_table[]</span></code>: An array of 48 memory pointers, exposed globally to the linker. Each index corresponds to an interrupt vector (0-47) and points to the specific memory address of that vector’s executable stub (isr_stub_0, isr_stub_1, etc.).</p></li>
+</ul>
+</section>
+<section id="assembly-macros">
+<h3>Assembly Macros<a class="headerlink" href="#assembly-macros" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">isr_no_err</span> <span class="pre">vector</span></code>: Generates an entry stub for CPU exceptions and hardware IRQs that do not push a hardware error code. It pushes a dummy error code (0) to ensure the stack frame aligns perfectly with the C interrupt_frame structure, pushes the vector number, and jumps to isr_common.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">isr_err</span> <span class="pre">vector</span></code>: Generates an entry stub for specific CPU exceptions (like Page Faults or Double Faults) where the hardware automatically pushes an error code. It simply pushes the vector number and jumps to isr_common.</p></li>
+</ul>
+</section>
+<section id="execution-routines">
+<h3>Execution Routines<a class="headerlink" href="#execution-routines" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">load_idt(struct</span> <span class="pre">idt_ptr*</span> <span class="pre">ptr)</span></code>: Executes the lidt (%rdi) instruction. In the System V AMD64 ABI, the first argument of a C function call is placed in the %rdi register, which this routine directly passes to the CPU to load the new IDT.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">isr_common</span></code>: The universal bridge handling the context switch between the math workload and the kernel interrupt dispatcher.</dt><dd><ul>
+<li><p>Behavior:</p></li>
+<li><p>State Preservation: Pushes all 15 general-purpose registers (%rax through %r15) onto the stack to freeze the current program’s state.</p></li>
+<li><p>C Dispatch: Copies the current stack pointer (%rsp) into the first argument register (%rdi). This allows the C function interrupt_dispatcher(struct interrupt_frame* frame) to read the stack exactly as it was laid out.</p></li>
+<li><p>Restoration: Once the C router finishes, it pops all 15 registers off the stack in reverse order, cleans up the 16 bytes used by the vector number and error code, and executes iretq to cleanly resume the interrupted unikernel execution.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">isr_stub_[0-47]</span></code>: The 48 dynamically generated labels that act as the actual entry points for the IDT.</p></li>
+</ul>
+</section>
+</section>
+<section id="kernel-c">
+<h2>kernel.c<a class="headerlink" href="#kernel-c" title="Link to this heading"></a></h2>
+<section id="id12">
+<h3>Overview<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<p>The kernel.c module serves as the primary entry point and central orchestrator for the Math Unikernel. It is responsible for accepting the hardware state handed over by the Limine bootloader, initializing all core CPU and memory subsystems, and transitioning the system into an infinite state machine loop designed to ingest, execute, and return mathematical workloads. Coupled with kernel_api.h, this module establishes a fixed-address Application Binary Interface (ABI). This allows dynamically downloaded external payloads to invoke internal kernel functions (like SIMD-accelerated matrix multiplication or huge page allocations) without requiring a traditional operating system system-call (syscall) interface.</p>
+</section>
+<section id="system-integration-boot-sequence">
+<h3>System Integration &amp; Boot Sequence<a class="headerlink" href="#system-integration-boot-sequence" title="Link to this heading"></a></h3>
+<p>The execution strictly begins at kernel_main() after Limine sets up the initial 64-bit environment. The boot sequence follows a strict dependency chain:
+* Bootloader Handshake: Validates memory maps, kernel base addresses, and framebuffers provided by Limine.
+* Hardware Initialization: Remaps the legacy PIC, then initializes the GDT, IDT, Physical Memory Manager (PMM), and Virtual Memory Manager (VMM).
+* Subsystem Bring-up: Enables CPU SIMD instructions (AVX/SSE) for math acceleration, configures the display, initializes serial drivers for I/O, and scans the PCI bus for the network controller.
+* API Mapping: Maps the kernel_api_t structure to a strict memory address (0x10000000) and populates it with kernel function pointers.
+* Hardware Interrupts: Executes __asm__ volatile(“sti”); to allow the network/serial drivers to start catching incoming data.</p>
+</section>
+<section id="the-unikernel-state-machine">
+<h3>The Unikernel State Machine<a class="headerlink" href="#the-unikernel-state-machine" title="Link to this heading"></a></h3>
+<p>Once initialized, the kernel drops into an infinite do-while loop representing the unikernel’s lifecycle:
+* POLLING: The kernel waits to receive a “magic number” over the I/O interface. It then polls for the expected byte size of the incoming workload, allocates the necessary 2MB huge pages via the VMM, and downloads the raw executable payload directly into memory.
+* EXECUTING: The kernel casts the downloaded memory block into a function pointer (void (<a href="#id13"><span class="problematic" id="id14">*</span></a>workload)()) and directly executes the untrusted payload in Ring 0. The payload utilizes the kernel_api_t to perform its math operations.
+* EXTRACTING: After the payload returns, the kernel prepares to extract the results (stored in the API’s output buffer) and resets the state back to POLLING.</p>
+</section>
+<section id="id15">
+<h3>Direct API References<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<p><strong>Macros</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">KERNEL_API_ADDRESS</span></code>: Hardcoded to 0x10000000. The fixed virtual memory address where the kernel exposes its function pointers to the external payloads.</p></li>
+</ul>
+<p><strong>Data Structures</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">kernel_api_t</span></code>: The central interface struct that grants the external mathematical payload access to kernel-level subroutines.</dt><dd><ul>
+<li><p>Function Pointers:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">alloc_huge_page</span></code>: Grants the payload the ability to allocate 2MB continuous pages.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dot_product</span></code>: A pointer to the kernel’s hardware-accelerated dot product function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">matrix_multiply</span></code>: A pointer to the kernel’s hardware-accelerated matrix multiplication function.</p></li>
+<li><p>Fields:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void*</span> <span class="pre">output_buffer</span></code>: A pointer configured by the payload to indicate where its final computed results are stored.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">output_size</span></code>: The byte size of the payload’s final results.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">kernel_main(void)</span></code>: The main C entry point called by the Limine bootloader. It orchestrates the entire hardware initialization sequence, maps the kernel_api_t, and traps the CPU in the Polling/Executing/Extracting state machine loop.</p></li>
+</ul>
+</section>
+</section>
+<section id="display-c-display-driver-framebuffer-terminal">
+<h2>display.c (Display Driver &amp; Framebuffer Terminal)<a class="headerlink" href="#display-c-display-driver-framebuffer-terminal" title="Link to this heading"></a></h2>
+<section id="id16">
+<h3>Overview<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<p>The Display module provides a rudimentary, kernel-level terminal by writing raw pixel data directly to the system’s linear framebuffer. Because a bare-metal unikernel lacks a standard standard output (stdout) or a window manager, this module manually tracks cursor positions and paints individual character pixels to the screen. It utilizes an embedded 8x8 bitmap font (font8x8_basic.h) to render ASCII characters. The driver supports basic text rendering, cursor management (including tabs, newlines, and automatic line wrapping), and built-in numeric formatting to easily dump 64-bit hexadecimal and decimal variables directly to the monitor.</p>
+</section>
+<section id="id17">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<p>The display driver is initialized in kernel_main() immediately after the core memory subsystems and SIMD instructions are enabled. The initialization relies directly on the bootloader handshake: Limine provides a limine_framebuffer_request structure containing the physical hardware parameters of the monitor (the raw memory address of the pixel buffer, the pitch/bytes-per-row, the width, and the height). These parameters are passed into display_init(), which establishes the global terminal state and flushes the screen with a dark gray background (0x111111) to visually confirm that the driver has taken control of the monitor.</p>
+</section>
+<section id="id18">
+<h3>Application Example<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<p>The display.h header provides a robust set of C macros that make logging from anywhere in the kernel clean and readable.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/display.h&quot;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">demo_terminal_output</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">memory_address</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x10000000</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">bytes_loaded</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4096</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Standard string printing</span>
+<span class="w">    </span><span class="n">PRINTS</span><span class="p">(</span><span class="s">&quot;Math Unikernel Payload Loader</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Formatted hex and decimal printing</span>
+<span class="w">    </span><span class="n">PRINTS</span><span class="p">(</span><span class="s">&quot;Target Address: &quot;</span><span class="p">);</span><span class="w"> </span><span class="n">PRINTH</span><span class="p">(</span><span class="n">memory_address</span><span class="p">);</span><span class="w"> </span><span class="n">PRINTLN</span><span class="p">;</span>
+<span class="w">    </span><span class="n">PRINTF</span><span class="p">(</span><span class="s">&quot;Bytes Loaded:&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">bytes_loaded</span><span class="p">);</span><span class="w"> </span><span class="n">PRINTLN</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Clear the screen to start fresh</span>
+<span class="w">    </span><span class="n">fb_clear</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h3>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h3>
+<p><strong>Logging Macros</strong></p>
+<p>These macros wrap the underlying C functions to provide a streamlined, syntax-friendly logging interface.
+* <code class="docutils literal notranslate"><span class="pre">PRINTS(msg)</span></code> : Prints a standard null-terminated C string.
+* <code class="docutils literal notranslate"><span class="pre">PRINTH(val)</span></code> : Prints a 64-bit integer in hexadecimal format.
+* <code class="docutils literal notranslate"><span class="pre">PRINTD(val)</span></code> : Prints a 64-bit integer in base-10 decimal format.
+* <code class="docutils literal notranslate"><span class="pre">PRINTLN</span></code> : Moves the cursor to the beginning of the next line.
+* <code class="docutils literal notranslate"><span class="pre">PRINTTAB</span></code> : Advances the cursor by 4 character spaces.
+* <code class="docutils literal notranslate"><span class="pre">PRINTF(msg,</span> <span class="pre">val)</span></code> : A composite macro that prints a string, appends a space, and prints a decimal value (e.g., PRINTF(“Error Code:”, 14)).</p>
+<p><strong>Macros &amp; State Variables</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">DISPLAY_INIT_SUCCESS</span></code> : Evaluates to 64 (1&lt;&lt;6). Returned upon successful initialization of the framebuffer state.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">Terminal</span> <span class="pre">State</span></code> : The driver internally tracks fb_ptr (the mapped memory address), fb_pitch, fb_width, fb_height, and the current cursor_x and cursor_y coordinates.</p></li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">display_init(uint32_t</span> <span class="pre">*addr,</span> <span class="pre">uint32_t</span> <span class="pre">pitch,</span> <span class="pre">uint32_t</span> <span class="pre">width,</span> <span class="pre">uint32_t</span> <span class="pre">height)</span></code>: Configures the internal state variables using the hardware parameters provided by Limine, and paints the initial dark gray background. Returns: DISPLAY_INIT_SUCCESS.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">fb_putchar(char</span> <span class="pre">c)</span></code>: The core rendering engine. It maps the ASCII character c to its corresponding 8x8 bitmap array. It iterates through the bitmap, drawing white pixels (0xFFFFFF) directly to the fb_ptr memory address. It handles n by resetting the X-coordinate and dropping the Y-coordinate by the line height, and handles t by advancing the cursor 4 spaces. Automatically wraps to the next line if the cursor exceeds the fb_width.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">fb_print(const</span> <span class="pre">char</span> <span class="pre">*str)</span></code>: Iterates through a null-terminated string array, passing each character sequentially to fb_putchar.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">fb_print_hex(uint64_t</span> <span class="pre">val)</span></code>: Converts a 64-bit unsigned integer into a 16-character hexadecimal string. It prepends 0x and uses bitwise shifting to extract and print each nibble.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">fb_print_dec(uint64_t</span> <span class="pre">val)</span></code>: Converts a 64-bit unsigned integer into a base-10 decimal string using modulus arithmetic. It safely stores the digits in a temporary buffer and prints them in reverse (correct) order.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">fb_clear()</span></code>: Overwrites the entire mapped framebuffer with pure black pixels (0x00000000) and resets the cursor_x and cursor_y coordinates back to 0 (the top-left corner).</p></li>
+</ul>
+</section>
+</section>
+<section id="mathlib-c-hardware-accelerated-math-library">
+<h2>mathlib.c (Hardware-Accelerated Math Library)<a class="headerlink" href="#mathlib-c-hardware-accelerated-math-library" title="Link to this heading"></a></h2>
+<section id="id19">
+<h3>Overview<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<p>The Math Library represents the core computational engine of the Math Unikernel. Because standard C libraries (libc, libm) are not available in this bare-metal environment, this module implements its own highly optimized mathematical routines. It explicitly targets modern CPU SIMD (Single Instruction, Multiple Data) capabilities using the #pragma GCC target(“avx,fma”) directive and Intel intrinsics (&lt;immintrin.h&gt;). By utilizing 256-bit registers (__m256), these functions can process 8 single-precision floating-point numbers simultaneously, drastically reducing CPU cycle counts for linear algebra operations.</p>
+</section>
+<section id="system-integration-application-example">
+<h3>System Integration &amp; Application Example<a class="headerlink" href="#system-integration-application-example" title="Link to this heading"></a></h3>
+<p>These functions are exposed directly to the dynamically downloaded payloads via the kernel_api_t structure mapped at 0x10000000. To maximize performance and prevent hardware faults, arrays passed to these functions (especially vectors and dense matrices) should be strictly 32-byte aligned in memory.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/kernel_api.h&quot;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">payload_main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">kernel_api_t</span><span class="o">*</span><span class="w"> </span><span class="n">api</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">kernel_api_t</span><span class="o">*</span><span class="p">)</span><span class="n">KERNEL_API_ADDRESS</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// Allocate 32-byte aligned huge pages for the matrices</span>
+<span class="w">    </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">mat_A</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">api</span><span class="o">-&gt;</span><span class="n">alloc_huge_page</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">VMM_PRESENT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">VMM_WRITEABLE</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">mat_B</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">api</span><span class="o">-&gt;</span><span class="n">alloc_huge_page</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">VMM_PRESENT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">VMM_WRITEABLE</span><span class="p">);</span>
+<span class="w">    </span><span class="kt">float</span><span class="o">*</span><span class="w"> </span><span class="n">mat_C</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">api</span><span class="o">-&gt;</span><span class="n">alloc_huge_page</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">VMM_PRESENT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">VMM_WRITEABLE</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Initialize matrices with deterministic data</span>
+<span class="w">    </span><span class="n">api</span><span class="o">-&gt;</span><span class="n">init_matrix_deterministic</span><span class="p">(</span><span class="n">mat_A</span><span class="p">,</span><span class="w"> </span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="mi">1024</span><span class="p">);</span>
+<span class="w">    </span><span class="n">api</span><span class="o">-&gt;</span><span class="n">init_matrix_deterministic</span><span class="p">(</span><span class="n">mat_B</span><span class="p">,</span><span class="w"> </span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="mi">1024</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// Perform hardware-accelerated SIMD multiplication</span>
+<span class="w">    </span><span class="n">api</span><span class="o">-&gt;</span><span class="n">matrix_multiply</span><span class="p">(</span><span class="n">mat_A</span><span class="p">,</span><span class="w"> </span><span class="n">mat_B</span><span class="p">,</span><span class="w"> </span><span class="n">mat_C</span><span class="p">,</span><span class="w"> </span><span class="mi">1024</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id20">
+<h3>API Reference<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<p><strong>Compute-Bound Operations</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">float</span> <span class="pre">dot_product(float*</span> <span class="pre">a,</span> <span class="pre">float*</span> <span class="pre">b,</span> <span class="pre">uint64_t</span> <span class="pre">count)</span></code>: Computes the scalar dot product of two vectors using AVX 256-bit registers. It processes 8 floats per iteration using _mm256_fmadd_ps to perform simultaneous multiplication and addition. After the vectorized loop, it stores the results into a 32-byte aligned temporary array and performs a final scalar reduction to calculate the total.</dt><dd><ul>
+<li><p>Parameters: a and b (input vectors), count (number of elements).</p></li>
+<li><p>Returns: The resulting scalar sum.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">matrix_multiply(float*</span> <span class="pre">a,</span> <span class="pre">float*</span> <span class="pre">b,</span> <span class="pre">float*</span> <span class="pre">out,</span> <span class="pre">uint64_t</span> <span class="pre">n)</span></code>: Performs dense matrix multiplication ($C = AB$). To optimize cache locality and prevent cache trashing, it implements a tiling algorithm using a hardcoded TILE_SIZE of 64. It automatically pads the matrix dimension $n$ to the nearest multiple of 8 to ensure perfect AVX register alignment.</dt><dd><ul>
+<li><p>Parameters: a and b (input matrices), out (zeroed output matrix), n (matrix dimension).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Memory-Bound Operations</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">spmv_csr(float*</span> <span class="pre">values,</span> <span class="pre">uint32_t*</span> <span class="pre">col_idx,</span> <span class="pre">uint32_t*</span> <span class="pre">row_ptr,</span> <span class="pre">float*</span> <span class="pre">x,</span> <span class="pre">float*</span> <span class="pre">y,</span> <span class="pre">uint64_t</span> <span class="pre">num_rows)</span></code>: Computes Sparse Matrix-Vector Multiplication ($y = Ax$) using the Compressed Sparse Row (CSR) format.</dt><dd><ul>
+<li><p>Implementation Details: It attempts to use AVX for rows containing 8 or more consecutive elements. Because the x vector relies on non-contiguous column indices, it uses a manual gather approach to load the x vector into the AVX register before executing _mm256_fmadd_ps. It safely falls back to standard scalar math for short rows and “tail” elements that do not divide cleanly by 8.</p></li>
+<li><p>Alignment Notes: values, x, and y must be 32-byte aligned; col_idx and row_ptr have no alignment requirements.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p><strong>Initialization &amp; Helper Routines</strong></p>
+<p>These helpers generate reproducible datasets without relying on external math libraries (like libm).
+* <code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">generate_banded_matrix(float*</span> <span class="pre">values,</span> <span class="pre">uint32_t*</span> <span class="pre">col_idx,</span> <span class="pre">uint32_t*</span> <span class="pre">row_ptr,</span> <span class="pre">uint64_t</span> <span class="pre">num_rows,</span> <span class="pre">uint64_t</span> <span class="pre">band_width)</span></code>: Generates a deterministic sparse matrix in CSR format with a defined band_width above and below the main diagonal. The injected value decays based on its distance from the diagonal using the formula: $1.0 / (1.0 + <a href="#id22"><span class="problematic" id="id23">|row - col|</span></a>)$. Returns the total number of non-zero (NNZ) elements written.
+* <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">init_vector_deterministic(float*</span> <span class="pre">vec,</span> <span class="pre">uint64_t</span> <span class="pre">count)</span></code>: Populates a vector using a simple parabolic mathematical pattern that creates a predictable range of values ($[0, 1]$) without trigonometric functions.
+* <code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">init_matrix_deterministic(float*</span> <span class="pre">mat,</span> <span class="pre">uint64_t</span> <span class="pre">rows,</span> <span class="pre">uint64_t</span> <span class="pre">cols)</span></code>: Initializes a dense matrix with predictable floating-point values generated via a combination of row/column indexing and modulo arithmetic.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="boot.html" class="btn btn-neutral float-left" title="BOOT COMPONENTS" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="memory.html" class="btn btn-neutral float-right" title="MEMORY MANAGEMENT" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Eddy Rodriguez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

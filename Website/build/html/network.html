@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NETWORK COMPONENTS &mdash; Math Unikernel 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="_static/css\lightbox.min.css?v=6e7d0de0" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=3db2c5b4" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="_static/js\lightbox-plus-jquery.min.js?v=f0ca4bb6"></script>
+      <script>lightbox.option({"alwaysShowNavOnTouchDevices": false, "albumLabel": "Image %1 of %2", "disableScrolling": false, "fadeDuration": 600, "fitImagesInViewport": true, "imageFadeDuration": 600, "positionFromTop": 50, "resizeDuration": 700, "showImageNumberLabel": true, "wrapAround": true})</script>
+      <script src="_static/custom.js?v=46a9058e"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="MEMORY MANAGEMENT" href="memory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Math Unikernel
+              <img src="_static/logo.png" class="logo" alt="Logo"/>
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-1-wsl-setup-windows-users">Phase 1: WSL Setup (Windows Users)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-2-prerequisites-verification">Phase 2: Prerequisites &amp; Verification</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#install-system-packages">1. Install System Packages</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#setup-the-cross-compiler">2. Setup the Cross-Compiler</a></li>
+<li class="toctree-l3"><a class="reference internal" href="quickstart.html#limine-bootloader-host-tool">3. Limine Bootloader Host Tool</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#phase-3-build-run-workflow">Phase 3: Build &amp; Run Workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#troubleshooting-common-errors">Troubleshooting Common Errors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="repository.html">GitHub Repository</a></li>
+<li class="toctree-l1"><a class="reference internal" href="boot.html">BOOT COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="boot.html#boot-s-boot-assembly-kernel-handoff">boot.S (Boot Assembly &amp; Kernel Handoff)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#system-integration-bootloader-handshake">System Integration &amp; Bootloader Handshake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#execution-flow-example">Execution Flow Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="boot.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="core_components.html">CORE COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#gtd-c-global-descriptor-table">gtd.c (Global Descriptor Table)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#direct-api-references">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#idt-c-interrupt-descriptor-table">idt.c (Interrupt Descriptor Table)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id3">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id4">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id5">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id6">Direct API References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#isr-s-interrupt-service-routine">isr.S (Interrupt Service Routine)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id9">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id10">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id11">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#global-tables">Global Tables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#assembly-macros">Assembly Macros</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#execution-routines">Execution Routines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#kernel-c">kernel.c</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id12">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#system-integration-boot-sequence">System Integration &amp; Boot Sequence</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#the-unikernel-state-machine">The Unikernel State Machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id15">Direct API References</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#display-c-display-driver-framebuffer-terminal">display.c (Display Driver &amp; Framebuffer Terminal)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id16">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id17">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id18">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="core_components.html#mathlib-c-hardware-accelerated-math-library">mathlib.c (Hardware-Accelerated Math Library)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id19">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#system-integration-application-example">System Integration &amp; Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="core_components.html#id20">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="memory.html">MEMORY MANAGEMENT</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#pmm-c-physical-memory-manager">pmm.c (Physical Memory Manager)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#api-reference">API Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="memory.html#vmm-c-virtual-memory-manager">vmm.c (Virtual Memory Manager)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#id2">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="memory.html#id3">API Reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">NETWORK COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pci-c-peripheral-component-interconnect">pci.c (Peripheral Component Interconnect)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-integration-initialization">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#application-example">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#direct-api-references">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#network-c-network-layer">network.c (Network Layer)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Direct API References:</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#loader-c-payload-loader">loader.c (Payload Loader)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">System Integration &amp; Initialization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Application Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id8">Direct API References:</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Math Unikernel</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">NETWORK COMPONENTS</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/network.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="network-components">
+<h1>NETWORK COMPONENTS<a class="headerlink" href="#network-components" title="Link to this heading"></a></h1>
+<figure class="align-center" id="id9">
+<a class="reference internal image-reference" href="_images/network_main.png"><a href="_images/network_main.png" data-lightbox="image-set">
+<img alt="Main Network Architecture Diagram" src="_images/network_main.png" style="width: 100%;" />
+</a>
+</a>
+<figcaption>
+<p><span class="caption-text">High-level overview of the Math Unikernel network stack and PCI bus integration.</span><a class="headerlink" href="#id9" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="pci-c-peripheral-component-interconnect">
+<h2>pci.c (Peripheral Component Interconnect)<a class="headerlink" href="#pci-c-peripheral-component-interconnect" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The Peripheral Component Interconnect (PCI) bus is the standard hardware interface through which the CPU discovers and communicates with expansion devices such as network controllers, storage adapters, and graphics cards. Each device on the bus is uniquely identified by a combination of bus number, slot number, and function number, and exposes a standardized 256-byte configuration space that the CPU can read to determine the device’s vendor, class, and memory-mapped or port-mapped I/O addresses. This module performs a full enumeration of the PCI bus to locate a supported network controller. Once found, it handles the complete bring-up sequence: waking the device from a low-power sleep state (D3) if necessary, enabling bus mastering and memory-mapped I/O access in the device’s command register, resolving the hardware IRQ line, and dispatching initialization to the appropriate NIC driver (Intel I219-LM or Realtek RTL8139) based on the device’s vendor ID.</p>
+</section>
+<section id="system-integration-initialization">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#system-integration-initialization" title="Link to this heading"></a></h3>
+<p>The PCI bus scan is the final step of the kernel’s hardware initialization sequence, called in kernel_main() after the display and serial drivers are online. It is positioned last among the boot-time initializations because it is the only subsystem that allocates physical and virtual memory at runtime (via the NIC drivers it dispatches to), requiring a fully operational PMM and VMM. It also registers interrupt handlers, requiring the IDT to already be loaded. pci_scan_bus() returns PCI_INIT_SUCCESS if a supported network controller is found and its driver is successfully dispatched, or 0 if no compatible device is detected. The kernel tracks this result in the shared init_status bitfield. A missing network controller is a fatal error; the kernel will print NETWORK_CONTROLLER_MISSING and halt via hcf(), as the entire workload delivery pipeline depends on the NIC being operational.</p>
+</section>
+<section id="application-example">
+<h3>Application Example<a class="headerlink" href="#application-example" title="Link to this heading"></a></h3>
+<p>The following example demonstrates how pci_scan_bus() is called in the boot sequence and how its result is validated.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/pci.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/kernel_logs.h&quot;</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">kernel_main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">uint16_t</span><span class="w"> </span><span class="n">init_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// ... display and serial init ...</span>
+<span class="w">    </span><span class="c1">// Scan the PCI bus for a supported NIC and initialize it</span>
+<span class="w">    </span><span class="n">init_status</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="n">pci_scan_bus</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// Validate — a missing NIC is fatal</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">init_status</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">PCI_INIT_SUCCESS</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PRINTS</span><span class="p">(</span><span class="n">NETWORK_CONTROLLER_FOUND</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">PRINTS</span><span class="p">(</span><span class="n">NETWORK_CONTROLLER_MISSING</span><span class="p">);</span>
+<span class="w">        </span><span class="n">hcf</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="direct-api-references">
+<h3>Direct API References:<a class="headerlink" href="#direct-api-references" title="Link to this heading"></a></h3>
+<p><strong>Macros</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">PCI_INIT_SUCCESS</span></code>: Evaluates to 256 (1&lt;&lt;8). Returned by pci_scan_bus() when a supported network controller has been found and its driver successfully dispatched.</p></li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">uint32_t</span> <span class="pre">pci_read_dword(uint8_t</span> <span class="pre">bus,</span> <span class="pre">uint8_t</span> <span class="pre">slot,</span> <span class="pre">uint8_t</span> <span class="pre">func,</span> <span class="pre">uint8_t</span> <span class="pre">offset)</span></code>: The fundamental PCI configuration space accessor. It constructs a 32-bit address from the bus, slot, function, and register offset values and writes it to the PCI CONFIG_ADDRESS I/O port (0xCF8). It then reads the 32-bit result back from the PCI CONFIG_DATA port (0xCFC). All higher-level PCI operations in this module are built on top of this function.</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">bus</span></code>: The PCI bus number (0–255).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slot</span></code>: The device slot number (0–31).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">func</span></code>: The function number within the device (0–7).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">offset</span></code>: The byte offset into the device’s configuration space (must be 4-byte aligned; the two lowest bits are masked off).</p></li>
+<li><p>Returns: The raw 32-bit value from the requested configuration register. A vendor field of 0xFFFF indicates no device is present at the given bus/slot/function combination.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint16_t</span> <span class="pre">pci_scan_bus()</span></code>: Iterates over all 256 buses, 32 slots, and 8 functions of the PCI address space. For each present device, it reads the class code (offset 0x08) and filters for devices matching base class 0x02 (Network Controller) and sub-class 0x00 (Ethernet). When a match is found, it performs the full bring-up sequence: calling pci_wake_device() to exit D3, enabling bus mastering and MMIO in the command register, resolving the IRQ line, and dispatching to either i219_init() or rtl8139_init() based on the vendor ID. The scan halts and returns immediately upon finding the first supported NIC. Returns: PCI_INIT_SUCCESS if a supported NIC was found and initialized, or 0 if the full bus was exhausted without finding a compatible device.</p></li>
+</ul>
+<p><strong>Internal Helpers</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">pci_write_dword(uint8_t</span> <span class="pre">bus,</span> <span class="pre">uint8_t</span> <span class="pre">slot,</span> <span class="pre">uint8_t</span> <span class="pre">func,</span> <span class="pre">uint8_t</span> <span class="pre">offset,</span> <span class="pre">uint32_t</span> <span class="pre">data)</span></code>: The write counterpart to pci_read_dword(). Constructs the same 32-bit address and writes the provided data value to the CONFIG_DATA port. Used internally by pci_scan_bus() to enable bus mastering and MMIO in the device command register, and by pci_wake_device() to transition a device out of a low-power state. Not exposed in pci.h.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">pci_wake_device(uint16_t</span> <span class="pre">bus,</span> <span class="pre">uint8_t</span> <span class="pre">slot,</span> <span class="pre">uint8_t</span> <span class="pre">func)</span></code>: Walks the device’s PCI capabilities linked list (starting from offset 0x34) searching for the Power Management capability (ID 0x01). If found, it reads the Power Management Control/Status Register (PMCSR) and checks the two lowest bits for the current power state. If the device is not already in D0 (fully awake), it clears those bits to force a transition to D0 and inserts a software delay of approximately 10ms to allow the hardware to stabilize. If the device reports no capabilities list, the function returns immediately. Not exposed in pci.h.</p></li>
+</ul>
+</section>
+</section>
+<section id="network-c-network-layer">
+<h2>network.c (Network Layer)<a class="headerlink" href="#network-c-network-layer" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>The network module sits directly above the NIC drivers in the software stack. Its role is to decouple the rest of the kernel from any specific hardware implementation: the NIC drivers call into this layer when a frame arrives, and this layer handles all Ethernet-level filtering, header parsing, and data routing. The NIC driver in use at runtime is itself registered into this layer via function pointers, meaning the loader, kernel state machine, and all other subsystems interact exclusively with this module and have no direct knowledge of whether an RTL8139 or an Intel I219-LM is physically present.</p>
+<p>The module implements a two-phase receive protocol built around the custom EtherType 0x88B5. All frames carrying a different EtherType are silently discarded. The first accepted frame is treated as a header frame, containing the 4-byte magic number and the 8-byte payload size; its payload is buffered internally for the loader to consume byte-by-byte via read_ethernet(). Every subsequent frame after the header is confirmed is treated as a data frame and its payload is written directly and contiguously into a caller-supplied destination buffer, typically a VMM-allocated huge page.</p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 50.0%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><figure class="align-center" id="id10">
+<a class="reference internal image-reference" href="_images/network_receive.png"><a href="_images/network_receive.png" data-lightbox="image-set">
+<img alt="Receive Protocol Sequence" src="_images/network_receive.png" style="width: 100%;" />
+</a>
+</a>
+<figcaption>
+<p><span class="caption-text"><strong>Figure A:</strong> The Receive Protocol Sequence.</span><a class="headerlink" href="#id10" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</td>
+<td><figure class="align-center" id="id11">
+<a class="reference internal image-reference" href="_images/network_transfer.png"><a href="_images/network_transfer.png" data-lightbox="image-set">
+<img alt="Transfer Protocol Sequence" src="_images/network_transfer.png" style="width: 100%;" />
+</a>
+</a>
+<figcaption>
+<p><span class="caption-text"><strong>Figure B:</strong> The Transfer Protocol Sequence.</span><a class="headerlink" href="#id11" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="id2">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<p>This module has no dedicated initialization function. It is wired up implicitly during the PCI bring-up sequence: after pci_scan_bus() identifies and initializes the NIC hardware, it immediately calls network_set_poll_fn() and network_set_send_fn() to register the driver’s specific polling and transmit routines into the network layer. From that point on, all upper layers interact exclusively with the network API. At the start of every POLLING cycle in the kernel state machine, kernel_main() calls reset_header() to clear all internal header state from the previous transaction before handing control to the loader. The loader then calls unlock() and poll_payload_size(), both of which drive the network layer forward by repeatedly calling read_ethernet() until the full magic number and payload size have been consumed from the header buffer. Once the header is fully consumed, the module automatically transitions to direct-write mode for all subsequent data frames.</p>
+</section>
+<section id="id3">
+<h3>Application Example<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<p>The following example demonstrates the complete data flow through the network layer for a single workload transaction, from NIC driver registration through payload delivery.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/network.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;nic_drivers/rtl8139.h&quot;</span>
+<span class="c1">// Step 1 — pci.c wires the NIC driver into the network layer</span>
+<span class="n">rtl8139_init</span><span class="p">(</span><span class="n">bar0</span><span class="p">,</span><span class="w"> </span><span class="n">irq_line</span><span class="p">);</span>
+<span class="n">network_set_poll_fn</span><span class="p">(</span><span class="n">rtl8139_poll</span><span class="p">);</span>
+<span class="c1">// Step 2 — kernel.c resets header state at the top of each POLLING cycle</span>
+<span class="n">reset_header</span><span class="p">();</span>
+<span class="c1">// Step 3 — loader.c consumes the header frame byte-by-byte</span>
+<span class="n">unlock</span><span class="p">();</span><span class="w">            </span><span class="c1">// reads 4 bytes: magic number</span>
+<span class="n">poll_payload_size</span><span class="p">();</span><span class="w"> </span><span class="c1">// reads 8 bytes: payload size (little-endian)</span>
+<span class="c1">// Step 4 — loader.c sets the destination buffer and waits for all data frames</span>
+<span class="n">network_set_dest</span><span class="p">(</span><span class="n">payload_mem</span><span class="p">,</span><span class="w"> </span><span class="n">payload_byte_size</span><span class="p">);</span>
+<span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">network_bytes_received</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">payload_byte_size</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">__asm__</span><span class="w"> </span><span class="k">volatile</span><span class="p">(</span><span class="s">&quot;hlt&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// sleep until next NIC interrupt</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="id4">
+<h3>Direct API References:<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<p><strong>Macros</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">ETHERTYPE_CUSTOM</span></code>: Defined as 0x88B5. The IEEE-reserved EtherType used to identify frames belonging to this system. Any Ethernet frame arriving at the NIC that does not carry this EtherType in bytes 12–13 of the header is silently discarded by network_receive_frame() and never reaches the rest of the kernel.</p></li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">network_set_poll_fn(void</span> <span class="pre">(*fn)())</span></code>: Registers the active NIC driver’s polling function. Once set, this function pointer is called by read_ethernet() whenever it needs to spin-wait for the next byte to arrive and no data is currently available. Called once by pci_scan_bus() immediately after the NIC driver is initialized.</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fn</span></code>: A function pointer to the NIC driver’s poll routine (e.g. rtl8139_poll or i219_poll_rx).</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">network_set_send_fn(void</span> <span class="pre">(*fn)(uint8_t*</span> <span class="pre">data,</span> <span class="pre">uint16_t</span> <span class="pre">length))</span></code>: Registers the active NIC driver’s frame transmit function. This decouples the result extraction path from any specific hardware implementation, allowing a future EXTRACTING stage to call a single unified send function without knowing which NIC is installed. Currently registered by pci_scan_bus() but the outbound transmission path in the EXTRACTING state is reserved for future use.</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fn</span></code>: A function pointer to the NIC driver’s send routine, accepting a data buffer pointer and its length in bytes.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">network_set_dest(uint8_t*</span> <span class="pre">dest,</span> <span class="pre">uint64_t</span> <span class="pre">expected_bytes)</span></code>: Configures the destination buffer for incoming payload data. After this call, all data frames passing the EtherType filter are written sequentially into dest until the total number of bytes written reaches expected_bytes. The internal received byte counter is also reset to zero. Called by poll_payload() in loader.c after the huge page has been allocated and the payload size is known.</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dest</span></code>: A pointer to the destination memory buffer, typically a VMM-allocated huge page.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">expected_bytes</span></code>: The exact number of payload bytes the network layer should write before considering the transfer complete.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">network_receive_frame(uint8_t*</span> <span class="pre">data,</span> <span class="pre">uint16_t</span> <span class="pre">length)</span></code>: The primary entry point called by NIC driver interrupt handlers when a frame has been received. It first validates the frame is large enough to contain a full Ethernet header (14 bytes) and that the EtherType field matches ETHERTYPE_CUSTOM (0x88B5); frames failing either check are silently dropped. The remaining logic branches on the internal hdr_done flag: if the header has not yet been consumed, the frame’s payload is copied into the internal header buffer and read_ethernet() is signalled; if the header is done, the payload bytes are written directly and sequentially into the destination buffer registered by network_set_dest().</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">data</span></code>: A pointer to the start of the raw Ethernet frame, including the 14-byte Ethernet header.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">length</span></code>: The total length of the frame in bytes, including the Ethernet header.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">network_bytes_received()</span></code>: Returns the running count of payload bytes written to the destination buffer since the last call to network_set_dest(). Used by poll_payload() in loader.c as the condition of its blocking wait loop to determine when the full workload has been received. Returns: The total number of payload bytes received into the current destination buffer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint8_t</span> <span class="pre">read_ethernet()</span></code>: A blocking, byte-oriented reader used exclusively by loader.c to consume the header frame one byte at a time. While the header has not yet been fully consumed (hdr_done is 0), it spins—calling the registered NIC poll function and halting the CPU between iterations—until a byte is available in the internal header buffer, then returns it. The transition point occurs after the 12th byte is returned: at that point hdr_done is set to 1, signalling to network_receive_frame() that all subsequent frames should be routed directly to the destination buffer rather than the header buffer. Returns: The next byte from the header buffer.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">reset_header()</span></code>: Clears all internal header state in preparation for a new transaction. Resets the hdr_done flag to 0, the header buffer length and read position to 0, and the rx_ready signal to 0. Must be called by kernel_main() at the top of every POLLING cycle before the loader begins consuming header bytes, to ensure that stale state from a previous transaction does not corrupt the parsing of the next incoming workload.</p></li>
+</ul>
+</section>
+</section>
+<section id="loader-c-payload-loader">
+<h2>loader.c (Payload Loader)<a class="headerlink" href="#loader-c-payload-loader" title="Link to this heading"></a></h2>
+<section id="id5">
+<h3>Overview<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<p>The loader module is responsible for the complete ingestion of an incoming workload from the network. It defines the communication protocol that the sender (send_data_hardware.py) and the kernel must mutually agree on, and provides three sequential functions that together drive the POLLING phase of the kernel state machine to completion: authenticating the incoming connection with a magic number handshake, determining the exact byte size of the payload, and then blocking until that payload has been fully received into memory. All three functions are built entirely on top of the network layer’s read_ethernet() and network_set_dest() APIs. The loader itself has no direct knowledge of the underlying NIC hardware or Ethernet framing; it operates purely at the byte stream level, consuming bytes one at a time from the network layer’s internal header buffer before handing the larger data transfer over to direct DMA-style writes into the destination huge page.</p>
+</section>
+<section id="id6">
+<h3>System Integration &amp; Initialization<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<p>The loader has no initialization function of its own. Its three functions are called directly and sequentially by kernel_main() within the POLLING case of the state machine, immediately after reset_header() has cleared the network layer’s internal state. The strict call order is unlock() first, then poll_payload_size(), then poll_payload(). Calling them out of order would result in malformed reads from the byte stream, as each function consumes a fixed and expected number of bytes from the header buffer. The protocol implemented by this module is a precise mirror of the transmission sequence in send_data_hardware.py. The sender transmits a single header frame containing a 4-byte big-endian magic number (0x474F2121, the ASCII string “GO!!”) followed immediately by the 8-byte little-endian payload size. All subsequent frames carry raw payload bytes. The kernel side uses unlock() to validate the magic number, poll_payload_size() to read the size, and poll_payload() to receive the raw data — the two sides are tightly coupled and any mismatch in byte order or framing will cause a silent protocol failure.</p>
+</section>
+<section id="id7">
+<h3>Application Example<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<p>The following example shows how the three loader functions are called within the POLLING case of the kernel state machine.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/loader.h&quot;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&quot;headers/network.h&quot;</span>
+<span class="k">case</span><span class="w"> </span><span class="no">POLLING</span><span class="p">:</span>
+<span class="w">    </span><span class="c1">// Clear network layer header state from the previous transaction</span>
+<span class="w">    </span><span class="n">reset_header</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// Step 1: Block until the magic number &quot;GO!!&quot; is received</span>
+<span class="w">    </span><span class="n">unlock</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// Step 2: Read the 8-byte little-endian payload size</span>
+<span class="w">    </span><span class="kt">uint64_t</span><span class="w"> </span><span class="n">payload_byte_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">poll_payload_size</span><span class="p">();</span>
+<span class="w">    </span><span class="c1">// Step 3: Allocate huge pages and block until all bytes arrive</span>
+<span class="w">    </span><span class="kt">uint8_t</span><span class="o">*</span><span class="w"> </span><span class="n">payload_mem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vmm_alloc_huge_page</span><span class="p">(</span><span class="n">num_pages</span><span class="p">,</span><span class="w"> </span><span class="n">VMM_PRESENT</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">VMM_WRITEABLE</span><span class="p">);</span>
+<span class="w">    </span><span class="n">poll_payload</span><span class="p">(</span><span class="n">payload_mem</span><span class="p">,</span><span class="w"> </span><span class="n">payload_byte_count</span><span class="p">);</span>
+<span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EXECUTING</span><span class="p">;</span>
+<span class="w">    </span><span class="k">break</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="id8">
+<h3>Direct API References:<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<p><strong>Macros</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">MAGIC_NUMBER</span></code>: Defined as 0x474F2121, the ASCII encoding of “GO!!”. This is the 4-byte big-endian handshake value that the sender must transmit as the first four bytes of the header frame. unlock() blocks indefinitely until this exact sequence has been assembled from the incoming byte stream. This value must match identically between the kernel and the Python sender script.</p></li>
+</ul>
+<p><strong>Functions</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">uint32_t</span> <span class="pre">unlock()</span></code>: Performs the magic number handshake. It calls read_ethernet() in a tight loop, accumulating bytes into a 32-bit integer by shifting left 8 bits and ORing in each new byte. The loop continues until the accumulated value equals MAGIC_NUMBER (0x474F2121). Because the magic number is transmitted big-endian and assembled by shifting, the first byte received becomes the most significant byte of the result. This function will block indefinitely if the sender never transmits the correct sequence, making it the gating condition for the entire POLLING cycle. Returns: The validated magic number (0x474F2121) upon a successful handshake.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">uint64_t</span> <span class="pre">poll_payload_size()</span></code>: Reads the next 8 bytes from the network layer byte stream and assembles them into a 64-bit unsigned integer representing the total byte size of the incoming payload. The bytes are read least-significant-first (little-endian): each byte is cast to uint64_t, shifted left by i*8 bits, and ORed into the result. This matches the struct.pack(“&lt;Q”, …) format used by the Python sender. The returned value is used by kernel_main() to calculate the number of 2MB huge pages to allocate before calling poll_payload(). Returns: The 64-bit little-endian payload size in bytes.</p></li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">void</span> <span class="pre">poll_payload(uint8_t*</span> <span class="pre">payload_mem_addr,</span> <span class="pre">uint64_t</span> <span class="pre">payload_byte_size)</span></code>: Orchestrates the bulk data transfer phase of the POLLING cycle. It calls network_set_dest() to register the allocated huge page and expected byte count with the network layer, then enters a blocking hlt loop, sleeping the CPU between NIC interrupts until network_bytes_received() reports that all expected bytes have arrived. Because the network layer writes incoming data frame payloads directly into the destination buffer as interrupts fire, this function has no copying or looping of its own; it serves purely as the synchronization barrier that prevents the state machine from advancing to EXECUTING before the payload is fully resident in memory.</dt><dd><ul>
+<li><p>Parameters:</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">payload_mem_addr</span></code>: A pointer to the VMM-allocated destination buffer where the incoming payload will be written. Must be large enough to hold payload_byte_size bytes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">payload_byte_size</span></code>: The exact number of bytes to wait for, as returned by poll_payload_size(). The function returns as soon as this threshold is reached.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="memory.html" class="btn btn-neutral float-left" title="MEMORY MANAGEMENT" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Eddy Rodriguez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

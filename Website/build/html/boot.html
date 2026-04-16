@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GitHub Repository &mdash; Math Unikernel 1.0.0 documentation</title>
+  <title>BOOT COMPONENTS &mdash; Math Unikernel 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
       <link rel="stylesheet" type="text/css" href="_static/css\lightbox.min.css?v=6e7d0de0" />
@@ -24,8 +24,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="BOOT COMPONENTS" href="boot.html" />
-    <link rel="prev" title="Quickstart Guide" href="quickstart.html" /> 
+    <link rel="next" title="CORE COMPONENTS" href="core_components.html" />
+    <link rel="prev" title="GitHub Repository" href="repository.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -62,13 +62,13 @@
 <li class="toctree-l2"><a class="reference internal" href="quickstart.html#troubleshooting-common-errors">Troubleshooting Common Errors</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">GitHub Repository</a></li>
-<li class="toctree-l1"><a class="reference internal" href="boot.html">BOOT COMPONENTS</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="boot.html#boot-s-boot-assembly-kernel-handoff">boot.S (Boot Assembly &amp; Kernel Handoff)</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="boot.html#overview">Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="boot.html#system-integration-bootloader-handshake">System Integration &amp; Bootloader Handshake</a></li>
-<li class="toctree-l3"><a class="reference internal" href="boot.html#execution-flow-example">Execution Flow Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="boot.html#api-reference">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="repository.html">GitHub Repository</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">BOOT COMPONENTS</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#boot-s-boot-assembly-kernel-handoff">boot.S (Boot Assembly &amp; Kernel Handoff)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-integration-bootloader-handshake">System Integration &amp; Bootloader Handshake</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#execution-flow-example">Execution Flow Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api-reference">API Reference</a></li>
 </ul>
 </li>
 </ul>
@@ -175,9 +175,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">GitHub Repository</li>
+      <li class="breadcrumb-item active">BOOT COMPONENTS</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="_sources/repository.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/boot.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -185,18 +185,96 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="github-repository">
-<h1>GitHub Repository<a class="headerlink" href="#github-repository" title="Link to this heading"></a></h1>
-<p>You can find the full source code, track issues, and contribute to the Math Unikernel project on our official repository.</p>
-<p><a class="reference external" href="https://github.com/lucasarabi/math-unikernel.git">View the Math Unikernel GitHub Repository</a></p>
+  <section id="boot-components">
+<h1>BOOT COMPONENTS<a class="headerlink" href="#boot-components" title="Link to this heading"></a></h1>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="_images/boot_sequence.png"><a href="_images/boot_sequence.png" data-lightbox="image-set">
+<img alt="Diagram showing the boot sequence and stack initialization" src="_images/boot_sequence.png" style="width: 100%;" />
+</a>
+</a>
+<figcaption>
+<p><span class="caption-text">Visual representation of the hardware handoff from boot.S to kernel_main().</span><a class="headerlink" href="#id1" title="Link to this image"></a></p>
+</figcaption>
+</figure>
+<section id="boot-s-boot-assembly-kernel-handoff">
+<h2>boot.S (Boot Assembly &amp; Kernel Handoff)<a class="headerlink" href="#boot-s-boot-assembly-kernel-handoff" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The boot.S file serves as the absolute entry point of the Math Unikernel. When the computer boots, the Limine bootloader initializes the hardware into 64-bit Long Mode, but it cannot directly execute C code because the C runtime environment (specifically, the stack) does not exist yet. This minimal assembly file acts as a trampoline. Its sole purpose is to declare compatibility with the Limine boot protocol, allocate a safe region of physical memory to act as the kernel’s stack, align that stack to the strict rules of the x86_64 architecture, and safely pass execution control over to the C-level kernel_main function.</p>
+</section>
+<section id="system-integration-bootloader-handshake">
+<h3>System Integration &amp; Bootloader Handshake<a class="headerlink" href="#system-integration-bootloader-handshake" title="Link to this heading"></a></h3>
+<p>The integration between boot.S and kernel.c relies entirely on the Limine Boot Protocol.
+* The Handshake: boot.S places a limine_base_revision structure into a specialized ELF section (.requests) using hardcoded magic numbers. This tells the bootloader that the kernel understands the modern Limine protocol.
+* Feature Requests: Over in kernel.c, the kernel makes further modular requests (Memory Map, HHDM offset, Kernel Address, and Framebuffer) placing them in the same .limine_requests section. Limine reads these sections before the kernel even boots and prepares the requested data.
+* The Handoff: Once Limine jumps to _start in boot.S, the assembly stub prepares the CPU and calls kernel_main. The very first thing kernel_main() does is verify that Limine successfully answered the base revision request (LIMINE_BASE_REVISION_SUPPORTED) and provided the requested pointers. If successful, the C kernel proceeds to initialize the GDT and IDT.</p>
+</section>
+<section id="execution-flow-example">
+<h3>Execution Flow Example<a class="headerlink" href="#execution-flow-example" title="Link to this heading"></a></h3>
+<p>The transition from hardware to C code is strictly linear and never returns to the bootloader.</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="c1">// 1. Hardware executes _start in boot.S</span>
+<span class="c1">// 2. boot.S sets up the stack and calls kernel_main()</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">kernel_main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// 3. Verify the bootloader handshake was successful</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">LIMINE_BASE_REVISION_SUPPORTED</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">memmap_request</span><span class="p">.</span><span class="n">response</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// Proceed with hardware initialization</span>
+<span class="w">        </span><span class="n">gdt_init</span><span class="p">();</span>
+<span class="w">        </span><span class="n">idt_init</span><span class="p">();</span>
+<span class="w">        </span><span class="c1">// ...</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// 4. Enter the infinite Math Unikernel state machine</span>
+<span class="w">    </span><span class="k">do</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// POLLING -&gt; EXECUTING -&gt; EXTRACTING</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="p">(</span><span class="n">running</span><span class="p">);</span>
+<span class="w">    </span><span class="c1">// 5. If the loop breaks, halt the CPU</span>
+<span class="w">    </span><span class="n">hcf</span><span class="p">();</span>
+<span class="p">}</span>
+<span class="c1">// 6. If hcf() somehow fails and kernel_main returns,</span>
+<span class="c1">//    boot.S catches it in the &#39;halt&#39; safety net.</span>
+</pre></div>
+</div>
+</section>
+<section id="api-reference">
+<h3>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h3>
+<p><strong>Limine Requests</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">limine_base_revision</span></code>: Placed in the .requests section. Contains two 64-bit magic numbers (0xf95623d0d23a4821 and 0x27a1a039145b6951) and requests protocol Revision 0. This is the foundational handshake that allows all subsequent Limine requests in kernel.c (like memmap_request and framebuffer_request) to function.</p></li>
+</ul>
+<p><strong>Memory Allocation (BSS Section)</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">stack_bottom</span> <span class="pre">&amp;</span> <span class="pre">stack_top</span></code>: The assembly file statically allocates a 32 Kilobyte (32768 bytes) block of uninitialized memory in the .bss section to serve as the kernel’s execution stack. It is aligned to a 64-byte boundary to optimize cache line performance. Because x86 stacks grow downwards, stack_top represents the starting memory address.</p></li>
+</ul>
+<p><strong>Execution Routines</strong></p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">_start</span></code>: The global entry point explicitly targeted by the Limine bootloader.</dt><dd><ul>
+<li><p>Behavior:</p></li>
+<li><p>Loads the address of stack_top into the CPU’s Stack Pointer register (%rsp).</p></li>
+<li><p>Executes andq $-16, %rsp to align the stack strictly to a 16-byte boundary. Note: This is a strict requirement of the System V AMD64 ABI; C functions utilizing SIMD instructions (like AVX/SSE) will crash if the stack is not aligned.</p></li>
+<li><p>Clears the Base Pointer register (xorq %rbp, %rbp) to denote the absolute top of the call stack frame, ensuring stack traces terminate cleanly.</p></li>
+<li><p>Executes the C function call kernel_main.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">halt</span></code>: A critical safety net located immediately after the call kernel_main instruction.</dt><dd><ul>
+<li><p>Behavior: The unikernel is designed to run infinitely inside kernel_main(). However, if the C code unexpectedly exits or returns, execution will fall into this routine. It disables maskable interrupts (cli), halts the CPU (hlt), and loops infinitely (jmp halt) to prevent the processor from executing garbage memory and hard-crashing.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="quickstart.html" class="btn btn-neutral float-left" title="Quickstart Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="boot.html" class="btn btn-neutral float-right" title="BOOT COMPONENTS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="repository.html" class="btn btn-neutral float-left" title="GitHub Repository" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="core_components.html" class="btn btn-neutral float-right" title="CORE COMPONENTS" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

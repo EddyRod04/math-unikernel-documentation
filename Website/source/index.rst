@@ -16,5 +16,9 @@ and running it using our custom scripts. We also include links to the GitHub rep
 
    quickstart
    repository
+   boot
+   core_components
+   memory
+   network
 
 
